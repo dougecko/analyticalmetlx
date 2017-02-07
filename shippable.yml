@@ -1,0 +1,15 @@
+language: scala
+
+scala:
+  - 2.11.5
+
+jdk:
+  - oraclejdk8
+
+build:
+  cache: true
+  cache_dir_list:
+    - $SHIPPABLE_BUILD_DIR/.ivy2
+    - $SHIPPABLE_BUILD_DIR/node_modules
+  ci:
+    - sbt test
