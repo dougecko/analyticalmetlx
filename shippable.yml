@@ -10,7 +10,7 @@ build:
   ci:
     - sbt test
     - mkdir -p shippable/testresults
-    - cp -R target/test-reports/* shippable/test-results
+    - cp -R target/test-reports/* shippable/testresults/
   cache: true
   cache_dir_list:
     - $SHIPPABLE_BUILD_DIR/.ivy2
