@@ -9,7 +9,6 @@ jdk:
 build:
   ci:
     - sbt test
-  post-ci:
     - mkdir -p shippable/testresults
     - cp -R target/test-reports/* shippable/test-results
   cache: true
