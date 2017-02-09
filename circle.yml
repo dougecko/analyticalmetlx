@@ -21,7 +21,7 @@ test:
     - sbt test
     # Launch Sauce Connect for functional tests
     - cd sc-*-linux && ./bin/sc --user $SAUCE_USERNAME --api-key $SAUCE_ACCESS_KEY --readyfile ~/sauce_is_ready:
-      background: true
+        background: true
     # Wait for Sauce Connect tunnel to be ready
     - while [ ! -e ~/sauce_is_ready ]; do sleep 1; done
     # Run app
