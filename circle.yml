@@ -2,41 +2,11 @@ machine:
   java:
     version: oraclejdk8
 
-dependencies:
-  post:
-    - wget https://saucelabs.com/downloads/sc-latest-linux.tar.gz
-    - tar -xzf sc-latest-linux.tar.gz
-
 test:
-  pre:
-    - npm install wdio
-    - npm install lodash
-    - npm install sprintf-js
-    - npm install wdio-mocha-framework
-    - npm install wdio-spec-reporter
-    - npm install wdio-selenium-standalone-service
-    - echo $! > running.pid
   override:
     # Run unit tests
     - sbt test
-    # Launch Sauce Connect for functional tests
-    - cd sc-*-linux && ./bin/sc --user $SAUCE_USERNAME --api-key $SAUCE_ACCESS_KEY --readyfile ~/sauce_is_ready:
-        background: true
-    # Wait for Sauce Connect tunnel to be ready
-    - while [ ! -e ~/sauce_is_ready ]; do sleep 1; done
-    # Run app
-    - sbt -Xms1536m -Xmx1536m -Dlogback.configurationFile=/var/snap-ci/repo/config/logback.xml -Dmetlx.configurationFile=/var/snap-ci/repo/config/configuration.ci.xml container:launch:
-        background: true
-    # Wait for app to be ready
-    - curl --retry 10 --retry-delay 2 -v http://localhost:8080
-    # Run selenium tests via webdriver.io
-    - ./node_modules/wdio/node_modules/webdriverio/bin/wdio wdio.multi.conf.js
   post:
-    # Wait for Sauce Connect to close the tunnel
-    - killall --wait sc
-    - pkill -KILL -P $(cat running.pid)
-    - kill -KILL $(cat running.pid)
-    - rm running.pid
-    - ps -ef | grep java
+    # Make test reports available to Circle
     - mkdir -p $CIRCLE_TEST_REPORTS/reports/
     - cp -R target/test-reports/* $CIRCLE_TEST_REPORTS/reports/
